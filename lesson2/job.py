@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 import time
 import numpy as np
 import math
-from sendemail import mail
+from sendmail import mail
 
 # https://www.joinquant.com/help/api/help#api:API%E6%96%87%E6%A1%A3
 # https://www.joinquant.com/help/api/help#JQData:JQData
