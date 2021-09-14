@@ -10,6 +10,8 @@
   <a href="https://juejin.im/user/5ea2ca74e51d4546b50d5f9f" target="_blank"><img src="https://img.shields.io/badge/juejin-掘金-blue.svg" alt="掘金"></a>
 </p>
 
+不建议 fork 项目，本项目会持续更新，只 fork 看不到更新，建议 star~
+
 [第一课:lesson 1](https://github.com/Jack-Cherish/quantitative/tree/main/lesson1)
 
 [第二课:lesson 2](https://github.com/Jack-Cherish/quantitative/tree/main/lesson2)
