@@ -7,9 +7,9 @@ from email.utils import formataddr
 from datetime import datetime
 import time
 
-my_sender = '***@qq.com'    # 发件人邮箱账号
-my_pass = '**'              # 发件人邮箱密码
-my_user = '***@qq.com'              # 收件人邮箱账号(这里发自己)
+my_sender = '1978542512@qq.com'    # 发件人邮箱账号
+my_pass = 'qkunumdawibidcja'              # 发件人邮箱密码
+my_user = '1978542512@qq.com'              # 收件人邮箱账号(这里发自己)
 
 def mail(message):
     ret = True
