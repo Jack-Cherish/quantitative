@@ -10,8 +10,16 @@
   <a href="https://juejin.im/user/5ea2ca74e51d4546b50d5f9f" target="_blank"><img src="https://img.shields.io/badge/juejin-掘金-blue.svg" alt="掘金"></a>
 </p>
 
-不建议 fork 项目，本项目会持续更新，只 fork 看不到更新，建议 star~
+不建议 fork 项目，本项目会持续更新，只 fork 看不到更新，**建议 star~**
+
+**B站上过热榜第一，目前 70W+ 播放的视频：**
+
+[真躺着赚钱？写代码全自动炒股，五万元，半年后赚了多少？](https://www.bilibili.com/video/BV1Z44y1874X)
+
+**视频对应的开源教程：**
 
 [第一课:lesson 1](https://github.com/Jack-Cherish/quantitative/tree/main/lesson1)
 
 [第二课:lesson 2](https://github.com/Jack-Cherish/quantitative/tree/main/lesson2)
+
+**后面持续更新，star 不错过哦~**
