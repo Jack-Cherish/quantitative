@@ -169,7 +169,7 @@ def test_100_days():
         previous_date  = current_dt - timedelta(days = each_day - 1)
         day = each_day
         print(each_day, previous_date)
-        check_out_list = get_rank(stock_pool)
+        check_out_list = get_rank(stock_pool, previous_date)
         for each_check_out in check_out_list:
             security_info = jq.get_security_info(each_check_out)
             stock_name = security_info.display_name
