@@ -33,7 +33,7 @@ mean_day = 20 # 计算结束 ma 收盘价，参考最近 mean_day
 mean_diff_day = 3 # 计算初始 ma 收盘价，参考(mean_day + mean_diff_day)天前，窗口为 mean_diff_day 的一段时间
 
 
-day = 1
+run_today_day = 1
 
 send_info = []
 
@@ -66,7 +66,7 @@ def market_cap():
 
 # 1-1 选股模块-动量因子轮动
 # 基于股票年化收益和判定系数打分,并按照分数从大到小排名
-def get_rank(stock_pool):
+def get_rank(stock_pool, day):
     score_list = []
     global send_info
     for stock in stock_pool:
@@ -169,7 +169,7 @@ def test_100_days():
         previous_date  = current_dt - timedelta(days = each_day - 1)
         day = each_day
         print(each_day, previous_date)
-        check_out_list = get_rank(stock_pool, previous_date)
+        check_out_list = get_rank(stock_pool, day)
         for each_check_out in check_out_list:
             security_info = jq.get_security_info(each_check_out)
             stock_name = security_info.display_name
@@ -184,7 +184,7 @@ def run_today():
     current_dt = time.strftime("%Y-%m-%d", time.localtime())
     current_dt = datetime.strptime(current_dt, '%Y-%m-%d')
     message = ""
-    check_out_list = get_rank(stock_pool)
+    check_out_list = get_rank(stock_pool, run_today_day)
     for each_check_out in check_out_list:
         security_info = jq.get_security_info(each_check_out)
         stock_name = security_info.display_name
