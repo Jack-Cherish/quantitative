@@ -34,6 +34,7 @@ mean_diff_day = 3 # 计算初始 ma 收盘价，参考(mean_day + mean_diff_day)
 
 
 run_today_day = 1
+day = 1
 
 send_info = []
 
