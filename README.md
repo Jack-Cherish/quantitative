@@ -22,4 +22,6 @@
 
 [第二课:lesson 2](https://github.com/Jack-Cherish/quantitative/tree/main/lesson2)
 
+[第三课:lesson 3](https://github.com/Jack-Cherish/quantitative/tree/main/lesson3)
+
 **后面持续更新，star 不错过哦~**
