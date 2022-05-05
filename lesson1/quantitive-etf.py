@@ -41,6 +41,7 @@ def get_fundamentals_info(stock):
                 ).filter(jq.valuation.code.in_([stock]))
     current_dt = time.strftime("%Y-%m-%d", time.localtime())
     current_dt = datetime.strptime(current_dt, '%Y-%m-%d')
+    
     previous_date  = current_dt - timedelta(days = day)
     df = jq.get_fundamentals_continuously(q, end_date = previous_date, count = 5, panel = False)
     print(df)
