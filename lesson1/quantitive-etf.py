@@ -9,7 +9,7 @@ import math
 # https://www.joinquant.com/help/api/help#JQData:JQData
 
 # aa 为你自己的帐号， bb 为你自己的密码
-jq.auth('aa','bb')
+jq.auth('15386200247','cJc3256876')
 
 # http://fund.eastmoney.com/ETFN_jzzzl.html
 stock_pool = [
@@ -60,7 +60,7 @@ def market_cap():
     wholeAList = list(wholeA['code'])
     return wholeAList
 
-# 1-1 选股模块-动量因子轮动 
+# 1-1 选股模块-动量因子轮动 x
 # 基于股票年化收益和判定系数打分,并按照分数从大到小排名
 def get_rank(stock_pool):
     score_list = []
