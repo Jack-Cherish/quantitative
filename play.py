@@ -339,3 +339,4 @@ def draw(main: Tk, render_canvas: Canvas, render_heart: Heart, render_frame=0):
   render_heart.render(render_canvas, render_frame)
 
   main.after(160, draw, main, render_canvas, render_heart, render_frame + 1)
+#%%
