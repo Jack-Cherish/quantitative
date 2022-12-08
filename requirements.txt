@@ -1,0 +1,7 @@
+akshare==1.7.10
+pandas==1.3.5
+numpy==1.22.0
+matplotlib==3.5.1
+TA-Lib==0.4.24
+scipy==1.8.0
+seaborn==0.11.2
