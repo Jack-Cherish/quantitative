@@ -45,17 +45,11 @@ class AbstractStockMonitor():
 
     def start(self, test_mode=False):
         print("Start monitor thread......")
-        if test_mode:
-            self.test_mode = test_mode
-            # 测试代码，用线程跑无法报错，所以直接运行
-            self.is_running = True
-            self.check_sell_or_buy()
-            return
-        # 1.新建一个线程
-        self.monitor_thread = threading.Thread(target=self.check_sell_or_buy)
-        # 2.启动线程，重复运行check_sell_or_buy函数
+
+        self.test_mode = test_mode
+        # 测试代码，用线程跑无法报错，所以直接运行
         self.is_running = True
-        self.monitor_thread.start()
+        self.check_sell_or_buy()
         return
 
     def stop(self):
@@ -64,6 +58,9 @@ class AbstractStockMonitor():
         return
 
     def check_sell_or_buy(self):
+        maxUpperRate = 1
+        minDownRate = -1
+
         print("check sell or buy is running...")
         print(self.is_running)
         while self.is_running:
@@ -78,13 +75,12 @@ class AbstractStockMonitor():
             print('大盘指数', sh_index_rate)
 
             if self.test_mode:
-                self.send_message(self.Signal['SELL'])
-                self.is_running = False
-                continue
+                maxUpperRate = float('-inf')
+                minDownRate = float('inf')
 
-            if monitor_stock_rate - sh_index_rate >= 0.1:
+            if monitor_stock_rate - sh_index_rate >= maxUpperRate:
                 self.push_signal(self.Signal['SELL'])
-            if monitor_stock_rate - sh_index_rate <= -1:
+            if monitor_stock_rate - sh_index_rate <= minDownRate:
                 self.push_signal(self.Signal['BUY'])
 
     def push_signal(self, send_signal):
@@ -138,6 +134,7 @@ class AbstractStockMonitor():
         msg["Subject"] = Header(mail_title, 'utf-8')
         msg["From"] = sender_qq_mail
         msg["To"] = receiver
+
         smtp.sendmail(sender_qq_mail, receiver, msg.as_string())
         smtp.quit()
         return
@@ -151,7 +148,7 @@ class AbstractStockMonitor():
 
     def is_on_open_time(self):
         cur_datetime = datetime.today()
-        if cur_datetime.day != self.last_datetime:
+        if cur_datetime.day != self.last_datetime.day:
             self.reset_signal_status()
 
         forenoon_start = cur_datetime.replace(hour=9, minute=30, second=0)
