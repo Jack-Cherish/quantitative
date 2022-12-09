@@ -67,13 +67,11 @@ class AbstractStockMonitor():
         print("Start monitor thread......")
 
         # noinspection PyBroadException
-        try:
-            self.test_mode = test_mode
-            # 测试代码，用线程跑无法报错，所以直接运行
-            self.is_running = True
-            self.check_sell_or_buy()
-        except Exception as e:
-            self.send_program_end_message(e)
+        self.test_mode = test_mode
+        # 测试代码，用线程跑无法报错，所以直接运行
+        self.is_running = True
+        self.check_sell_or_buy()
+        self.send_program_end_message()
 
         return
 
