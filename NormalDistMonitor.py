@@ -12,8 +12,28 @@ from DataPuller import DataPuller
 
 
 class AbstractStockMonitor():
+    """
+    信息发送状态常量
+    """
     SEND = 1
     UN_SEND = 0
+
+    """
+    邮件发送常量
+    """
+    QQ_MAIL_SMTP_SERVER = 'smtp.qq.com'
+    QQ_ACCOUNT = '957832064'
+    QQ_MAIL_AUTHORIZATION_CODE = 'sstjhvxllpdwbcbg'
+    SENDER_MAIL = '957832064@qq.com'
+    RECEIVER_MAIL = '957832064@qq.com'
+    MAIL_ENCODE = 'utf-8'
+    PRINCIPLE_INFO = """
+    1.迅速完成交易，挂当前价格，不要看盘。避免受到影响导致自己精神状态不佳
+    2.不做其他操作，只根据策略进行操作。其他操作是另外的策略，而且会使得自己散失主动权
+    3.不用让自己的心境因此而发生变化，生活中有更有意义的事情
+    
+    Attention：你真棒！又一次遵循了策略！
+    """
 
     dataPuller = DataPuller()
 
@@ -46,10 +66,15 @@ class AbstractStockMonitor():
     def start(self, test_mode=False):
         print("Start monitor thread......")
 
-        self.test_mode = test_mode
-        # 测试代码，用线程跑无法报错，所以直接运行
-        self.is_running = True
-        self.check_sell_or_buy()
+        # noinspection PyBroadException
+        try:
+            self.test_mode = test_mode
+            # 测试代码，用线程跑无法报错，所以直接运行
+            self.is_running = True
+            self.check_sell_or_buy()
+        except Exception as e:
+            self.send_program_end_message(e)
+
         return
 
     def stop(self):
@@ -86,21 +111,50 @@ class AbstractStockMonitor():
     def push_signal(self, send_signal):
         if self.send_signal_status[send_signal] == self.SEND:
             return
-        self.send_message(send_signal)
+        self.send_stock_operate_message(send_signal)
         self.send_signal_status[send_signal] = self.SEND
         return
 
-    def send_message(self, signal):
+    def send_program_end_message(self, message):
+        host_server = self.QQ_MAIL_SMTP_SERVER
+        sender_qq = self.QQ_ACCOUNT
+        pwd = self.QQ_MAIL_AUTHORIZATION_CODE
+        sender_qq_mail = self.SENDER_MAIL
+        receiver = self.RECEIVER_MAIL
+
+        # 邮件内容
+        mail_content = f"""
+        程序异常终止，异常信息：{message}
+        """
+        # 邮件标题
+        mail_title = f'程序异常终止'
+
+        msg = MIMEMultipart()
+        msg.attach(MIMEText(mail_content, 'plain', self.MAIL_ENCODE))
+        smtp = SMTP_SSL(host_server)
+        smtp.set_debuglevel(1)
+        smtp.ehlo(host_server)
+        smtp.login(sender_qq, pwd)
+
+        msg["Subject"] = Header(mail_title, self.MAIL_ENCODE)
+        msg["From"] = sender_qq_mail
+        msg["To"] = receiver
+
+        smtp.sendmail(sender_qq_mail, receiver, msg.as_string())
+        smtp.quit()
+        return
+
+    def send_stock_operate_message(self, signal):
         # qq邮箱smtp服务器
-        host_server = 'smtp.qq.com'
+        host_server = self.QQ_MAIL_SMTP_SERVER
         # sender_qq为发件人的qq号码
-        sender_qq = '957832064'
+        sender_qq = self.QQ_ACCOUNT
         # pwd为qq邮箱的授权码
-        pwd = 'sstjhvxllpdwbcbg'
+        pwd = self.QQ_MAIL_AUTHORIZATION_CODE
         # 发件人的邮箱
-        sender_qq_mail = '957832064@qq.com'
+        sender_qq_mail = self.SENDER_MAIL
         # 收件人邮箱
-        receiver = '957832064@qq.com'
+        receiver = self.RECEIVER_MAIL
         # 邮件的正文内容
         if signal == self.Signal.SELL: info = "股价涨幅过大"
         if signal == self.Signal.BUY: info = "股价跌幅过大"
@@ -110,11 +164,7 @@ class AbstractStockMonitor():
         mail_content = f'''
             {info}, {signal.name}信号, 监控股票信息  {stock_info}
             
-            1.迅速完成交易，挂当前价格，不要看盘。避免受到影响导致自己精神状态不佳
-            2.不做其他操作，只根据策略进行操作。其他操作是另外的策略，而且会使得自己散失主动权
-            3.不用让自己的心境因此而发生变化，生活中有更有意义的事情
-            
-            Attention：你真棒！又一次遵循了策略！
+            {self.PRINCIPLE_INFO}
             '''
         # 邮件标题
         mail_title = f'正态分布股价监控策略({signal.name})'
@@ -123,7 +173,7 @@ class AbstractStockMonitor():
         # MIMEMultipart类可以放任何内容
         msg = MIMEMultipart()
         # 把内容加进去
-        msg.attach(MIMEText(mail_content, 'plain', 'utf-8'))
+        msg.attach(MIMEText(mail_content, 'plain', self.MAIL_ENCODE))
         # ssl登录
         smtp = SMTP_SSL(host_server)
         # set_debuglevel()是用来调试的。参数值为1表示开启调试模式，参数值为0关闭调试模式
@@ -131,7 +181,7 @@ class AbstractStockMonitor():
         smtp.ehlo(host_server)
         smtp.login(sender_qq, pwd)
 
-        msg["Subject"] = Header(mail_title, 'utf-8')
+        msg["Subject"] = Header(mail_title, self.MAIL_ENCODE)
         msg["From"] = sender_qq_mail
         msg["To"] = receiver
 
@@ -171,3 +221,5 @@ class EtfMonitor(AbstractStockMonitor):
         fundData = self.dataPuller.pullFundData()
         monitorStockData = fundData[fundData[StockConstant.COL_CODE] == self.monitorStockCode]
         return monitorStockData
+
+#%%
